@@ -20,7 +20,7 @@ defmodule SnowPortalWeb.Router do
   scope "/", SnowPortalWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    get "/", LandingPageController, :home
   end
 
   # Other scopes may use custom stacks.
