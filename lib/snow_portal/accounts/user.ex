@@ -44,10 +44,6 @@ defmodule SnowPortal.Accounts.User do
       Defaults to `true`.
   """
   def registration_changeset(user, attrs, opts \\ []) do
-    IO.inspect(user, label: "user ****")
-    IO.inspect(attrs, label: "attrs ****")
-    IO.inspect(opts, label: "opts ****")
-
     user
     |> cast(attrs, [:email, :password, :first_name, :last_name, :user_name, :role])
     |> validate_email(opts)

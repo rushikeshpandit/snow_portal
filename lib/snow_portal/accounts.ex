@@ -6,7 +6,7 @@ defmodule SnowPortal.Accounts do
   import Ecto.Query, warn: false
   alias SnowPortal.Repo
 
-  alias SnowPortal.Accounts.{User, UserToken, UserNotifier}
+  alias SnowPortal.Accounts.{User, UserNotifier, UserToken}
 
   ## Database getters
 
@@ -81,8 +81,6 @@ defmodule SnowPortal.Accounts do
 
   """
   def register_user(attrs) do
-    IO.inspect(attrs, label: "attrs in Context ****")
-
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
