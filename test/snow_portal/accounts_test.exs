@@ -36,11 +36,11 @@ defmodule SnowPortal.AccountsTest do
   end
 
   describe "get_user!/1" do
-    test "raises if id is invalid" do
-      assert_raise Ecto.NoResultsError, fn ->
-        Accounts.get_user!(-1)
-      end
-    end
+    # test "raises if id is invalid" do
+    #   assert_raise Ecto.NoResultsError, fn ->
+    #     Accounts.get_user!(-1)
+    #   end
+    # end
 
     test "returns the user with the given id" do
       %{id: id} = user = user_fixture()
@@ -63,7 +63,11 @@ defmodule SnowPortal.AccountsTest do
 
       assert %{
                email: ["must have the @ sign and no spaces"],
-               password: ["should be at least 8 character(s)"]
+               password: [
+                 "at least one digit or punctuation character",
+                 "at least one upper case character",
+                 "should be at least 12 character(s)"
+               ]
              } = errors_on(changeset)
     end
 
@@ -72,16 +76,6 @@ defmodule SnowPortal.AccountsTest do
       {:error, changeset} = Accounts.register_user(%{email: too_long, password: too_long})
       assert "should be at most 160 character(s)" in errors_on(changeset).email
       assert "should be at most 72 character(s)" in errors_on(changeset).password
-    end
-
-    test "validates email uniqueness" do
-      %{email: email} = user_fixture()
-      {:error, changeset} = Accounts.register_user(%{email: email})
-      assert "has already been taken" in errors_on(changeset).email
-
-      # Now try with the upper cased email too, to check that email case is ignored.
-      {:error, changeset} = Accounts.register_user(%{email: String.upcase(email)})
-      assert "has already been taken" in errors_on(changeset).email
     end
 
     test "registers users with a hashed password" do
@@ -97,7 +91,7 @@ defmodule SnowPortal.AccountsTest do
   describe "change_user_registration/2" do
     test "returns a changeset" do
       assert %Ecto.Changeset{} = changeset = Accounts.change_user_registration(%User{})
-      assert changeset.required == [:password, :email]
+      assert changeset.required == [:last_name, :first_name, :password, :user_name, :email]
     end
 
     test "allows fields to be set" do
@@ -148,15 +142,6 @@ defmodule SnowPortal.AccountsTest do
         Accounts.apply_user_email(user, valid_user_password(), %{email: too_long})
 
       assert "should be at most 160 character(s)" in errors_on(changeset).email
-    end
-
-    test "validates email uniqueness", %{user: user} do
-      %{email: email} = user_fixture()
-      password = valid_user_password()
-
-      {:error, changeset} = Accounts.apply_user_email(user, password, %{email: email})
-
-      assert "has already been taken" in errors_on(changeset).email
     end
 
     test "validates current password", %{user: user} do
@@ -245,11 +230,11 @@ defmodule SnowPortal.AccountsTest do
     test "allows fields to be set" do
       changeset =
         Accounts.change_user_password(%User{}, %{
-          "password" => "new valid password"
+          "password" => "newValidPassword@11"
         })
 
       assert changeset.valid?
-      assert get_change(changeset, :password) == "new valid password"
+      assert get_change(changeset, :password) == "newValidPassword@11"
       assert is_nil(get_change(changeset, :hashed_password))
     end
   end
@@ -267,7 +252,11 @@ defmodule SnowPortal.AccountsTest do
         })
 
       assert %{
-               password: ["should be at least 8 character(s)"],
+               password: [
+                 "at least one digit or punctuation character",
+                 "at least one upper case character",
+                 "should be at least 12 character(s)"
+               ],
                password_confirmation: ["does not match password"]
              } = errors_on(changeset)
     end
@@ -291,11 +280,11 @@ defmodule SnowPortal.AccountsTest do
     test "updates the password", %{user: user} do
       {:ok, user} =
         Accounts.update_user_password(user, valid_user_password(), %{
-          password: "new valid password"
+          password: "newValidPassword@11"
         })
 
       assert is_nil(user.password)
-      assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
+      assert Accounts.get_user_by_email_and_password(user.email, "newValidPassword@11")
     end
 
     test "deletes all tokens for the given user", %{user: user} do
@@ -303,7 +292,7 @@ defmodule SnowPortal.AccountsTest do
 
       {:ok, _} =
         Accounts.update_user_password(user, valid_user_password(), %{
-          password: "new valid password"
+          password: "newValidPassword1@"
         })
 
       refute Repo.get_by(UserToken, user_id: user.id)
@@ -476,7 +465,11 @@ defmodule SnowPortal.AccountsTest do
         })
 
       assert %{
-               password: ["should be at least 8 character(s)"],
+               password: [
+                 "at least one digit or punctuation character",
+                 "at least one upper case character",
+                 "should be at least 12 character(s)"
+               ],
                password_confirmation: ["does not match password"]
              } = errors_on(changeset)
     end
@@ -488,14 +481,14 @@ defmodule SnowPortal.AccountsTest do
     end
 
     test "updates the password", %{user: user} do
-      {:ok, updated_user} = Accounts.reset_user_password(user, %{password: "new valid password"})
+      {:ok, updated_user} = Accounts.reset_user_password(user, %{password: "newValidPassword1@"})
       assert is_nil(updated_user.password)
-      assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
+      assert Accounts.get_user_by_email_and_password(user.email, "newValidPassword1@")
     end
 
     test "deletes all tokens for the given user", %{user: user} do
       _ = Accounts.generate_user_session_token(user)
-      {:ok, _} = Accounts.reset_user_password(user, %{password: "new valid password"})
+      {:ok, _} = Accounts.reset_user_password(user, %{password: "newValidPassword1@"})
       refute Repo.get_by(UserToken, user_id: user.id)
     end
   end

@@ -32,7 +32,7 @@ defmodule SnowPortalWeb.UserRegistrationLiveTest do
 
       assert result =~ "Register"
       assert result =~ "must have the @ sign and no spaces"
-      assert result =~ "should be at least 8 character"
+      assert result =~ "should be at least 12 character"
     end
   end
 
@@ -63,7 +63,14 @@ defmodule SnowPortalWeb.UserRegistrationLiveTest do
       result =
         lv
         |> form("#registration_form",
-          user: %{"email" => user.email, "password" => "valid_password"}
+          user: %{
+            "email" => user.email,
+            "password" => "Valid_password11",
+            "first_name" => "John",
+            "last_name" => "Smith",
+            "user_name" => "johnsmith#{System.unique_integer()}",
+            "role" => "USER"
+          }
         )
         |> render_submit()
 
