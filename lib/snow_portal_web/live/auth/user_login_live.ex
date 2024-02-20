@@ -15,7 +15,6 @@ defmodule SnowPortalWeb.UserLoginLive do
           for an account now.
         </:subtitle>
       </.header>
-      <p><%= @form.params["login_as"] %></p>
       <.simple_form for={@form} id="login_form" action={~p"/users/log_in"} phx-update="replace">
         <p>Login with</p>
         <fieldset class="flex items-center justify-between px-4">
