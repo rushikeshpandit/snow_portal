@@ -1,5 +1,8 @@
 defmodule SnowPortalWeb.Router do
-  alias SnowPortalWeb.Customer.Dashboard
+  alias SnowPortalWeb.Admin
+  alias SnowPortalWeb.Customer
+  alias SnowPortalWeb.Executive
+
   use SnowPortalWeb, :router
 
   import SnowPortalWeb.UserAuth
@@ -71,21 +74,21 @@ defmodule SnowPortalWeb.Router do
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
 
       scope "/customer", Customer, as: :customer do
-        live "/dashboard", Dashboard.IndexLive, :index
+        live "/dashboard", Customer.Dashboard.IndexLive, :index
       end
     end
 
     live_session :require_admin,
       on_mount: [{SnowPortalWeb.UserAuth, :ensure_authenticated}, SnowPortalWeb.RequireAdmin] do
       scope "/admin", Admin do
-        live "/dashboard", Dashboard.IndexLive, :index
+        live "/dashboard", Admin.Dashboard.IndexLive, :index
       end
     end
 
     live_session :require_executive,
       on_mount: [{SnowPortalWeb.UserAuth, :ensure_authenticated}, SnowPortalWeb.RequireExecutive] do
       scope "/executive", Executive do
-        live "/dashboard", Dashboard.IndexLive, :index
+        live "/dashboard", Executive.Dashboard.IndexLive, :index
       end
     end
   end
