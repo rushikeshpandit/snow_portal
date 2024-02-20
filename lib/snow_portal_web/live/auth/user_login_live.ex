@@ -1,6 +1,5 @@
 defmodule SnowPortalWeb.UserLoginLive do
   use SnowPortalWeb, :live_view
-  import Phoenix.LiveView.JS
 
   def render(assigns) do
     ~H"""
@@ -61,7 +60,7 @@ defmodule SnowPortalWeb.UserLoginLive do
     """
   end
 
-  def mount(params, session, socket) do
+  def mount(_params, _session, socket) do
     form = to_form(%{"login_as" => "email"}, as: "user")
     {:ok, assign(socket, form: form)}
   end
