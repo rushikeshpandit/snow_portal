@@ -33,7 +33,7 @@ defmodule SnowPortalWeb.UserAuth do
     |> renew_session()
     |> put_token_in_session(token)
     |> maybe_write_remember_me_cookie(token, params)
-    |> redirect(to: user_return_to || signed_in_path(conn))
+    |> redirect(to: user_return_to || navigate_to_dashboard(user.role))
   end
 
   defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}) do
@@ -224,4 +224,16 @@ defmodule SnowPortalWeb.UserAuth do
   defp maybe_store_return_to(conn), do: conn
 
   defp signed_in_path(_conn), do: ~p"/"
+
+  defp navigate_to_dashboard(:ADMIN) do
+    ~p"/admin/dashboard"
+  end
+
+  defp navigate_to_dashboard(:USER) do
+    ~p"/customer/dashboard"
+  end
+
+  defp navigate_to_dashboard(:EXECUTIVE) do
+    ~p"/executive/dashboard"
+  end
 end
