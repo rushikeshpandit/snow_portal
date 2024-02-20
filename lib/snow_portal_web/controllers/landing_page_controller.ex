@@ -1,4 +1,4 @@
-defmodule SnowPortalWeb.PageController do
+defmodule SnowPortalWeb.LandingPageController do
   use SnowPortalWeb, :controller
 
   def home(conn, _params) do
