@@ -1,4 +1,4 @@
-defmodule SnowPortalWeb.Executive.Dashboard.IndexLive do
+defmodule SnowPortalWeb.Executive.DashboardLive.Index do
   use SnowPortalWeb, :live_view
 
   def handle_params(params, _uri, socket) do
@@ -11,7 +11,7 @@ defmodule SnowPortalWeb.Executive.Dashboard.IndexLive do
     {:noreply, socket}
   end
 
-  defp apply_action(socket, :new, _params) do
+  defp apply_action(socket, :index, _params) do
     socket |> assign(:page_title, "Executive Dashboard")
   end
 end
