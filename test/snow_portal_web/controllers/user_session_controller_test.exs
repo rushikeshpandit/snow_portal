@@ -15,7 +15,7 @@ defmodule SnowPortalWeb.UserSessionControllerTest do
         })
 
       assert get_session(conn, :user_token)
-      assert redirected_to(conn) == ~p"/"
+      assert redirected_to(conn) == ~p"/customer/dashboard"
 
       # Now do a logged in request and assert on the menu
       conn = get(conn, ~p"/")
@@ -87,7 +87,7 @@ defmodule SnowPortalWeb.UserSessionControllerTest do
     test "redirects to login page with invalid credentials", %{conn: conn} do
       conn =
         post(conn, ~p"/users/log_in", %{
-          "user" => %{"user_name" => "invalid@email.com", "password" => "invalid_password"}
+          "user" => %{"user_name" => "invalid@email.com", "password" => "invalid_Password!1"}
         })
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) == "Invalid username or password"
