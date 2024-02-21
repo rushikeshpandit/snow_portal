@@ -356,4 +356,10 @@ defmodule SnowPortal.Accounts do
       {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
+
+  def list_users_by_role(params \\ []) do
+    User
+    |> where([u], u.role == ^to_string(params[:role]))
+    |> Repo.all()
+  end
 end
