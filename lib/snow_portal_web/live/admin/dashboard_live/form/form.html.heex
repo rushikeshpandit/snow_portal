@@ -1,0 +1,39 @@
+<div class="mx-auto max-w-xl">
+  <.simple_form
+    for={@form}
+    id="registration_form"
+    phx-submit="save"
+    phx-change="validate"
+    phx-trigger-action={@trigger_submit}
+    action={~p"/admin/dashboard"}
+    method="post"
+    phx-target={@myself}
+  >
+    <.error :if={@check_errors}>
+      Oops, something went wrong! Please check the errors below.
+    </.error>
+    <div class="grid grid-cols-2 gap-10">
+      <.input field={@form[:first_name]} label="First Name" placeholder="First Name" required />
+      <.input field={@form[:last_name]} label="Last Name" placeholder="Last Name" required />
+      <.input field={@form[:user_name]} label="Username" placeholder="Username" required />
+      <.input field={@form[:email]} type="email" label="Email" placeholder="Email" required />
+      <.input
+        field={@form[:password]}
+        type="password"
+        label="Password"
+        placeholder="Password"
+        required
+      />
+      <.input
+        field={@form[:role]}
+        type="select"
+        label="Role"
+        options={["USER", "ADMIN", "EXECUTIVE"]}
+        disabled={true}
+      />
+    </div>
+    <:actions>
+      <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
+    </:actions>
+  </.simple_form>
+</div>

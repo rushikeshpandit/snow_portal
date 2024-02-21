@@ -6,7 +6,7 @@ defmodule SnowPortalWeb.UserRegistrationLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
+    <div class="mx-auto max-w-xl">
       <.header class="text-center">
         Register for an account
         <:subtitle>
@@ -30,25 +30,26 @@ defmodule SnowPortalWeb.UserRegistrationLive do
         <.error :if={@check_errors}>
           Oops, something went wrong! Please check the errors below.
         </.error>
-        <.input field={@form[:first_name]} label="First Name" placeholder="First Name" required />
-        <.input field={@form[:last_name]} label="Last Name" placeholder="Last Name" required />
-        <.input field={@form[:user_name]} label="Username" placeholder="Username" required />
-        <.input field={@form[:email]} type="email" label="Email" placeholder="Email" required />
-        <.input
-          field={@form[:password]}
-          type="password"
-          label="Password"
-          placeholder="Password"
-          required
-        />
-        <.input
-          field={@form[:role]}
-          type="select"
-          label="Role"
-          options={["USER", "ADMIN", "EXECUTIVE"]}
-          required
-        />
-
+        <div class="grid grid-cols-2 gap-10">
+          <.input field={@form[:first_name]} label="First Name" placeholder="First Name" required />
+          <.input field={@form[:last_name]} label="Last Name" placeholder="Last Name" required />
+          <.input field={@form[:user_name]} label="Username" placeholder="Username" required />
+          <.input field={@form[:email]} type="email" label="Email" placeholder="Email" required />
+          <.input
+            field={@form[:password]}
+            type="password"
+            label="Password"
+            placeholder="Password"
+            required
+          />
+          <.input
+            field={@form[:role]}
+            type="select"
+            label="Role"
+            options={["USER", "ADMIN", "EXECUTIVE"]}
+            required
+          />
+        </div>
         <:actions>
           <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
         </:actions>
