@@ -11,7 +11,11 @@ defmodule SnowPortalWeb.UserSessionControllerTest do
     test "logs the user in", %{conn: conn, user: user} do
       conn =
         post(conn, ~p"/users/log_in", %{
-          "user" => %{"user_name" => user.user_name, "password" => valid_user_password()}
+          "user" => %{
+            "user_name" => user.user_name,
+            "password" => valid_user_password(),
+            "login_as" => "username"
+          }
         })
 
       assert get_session(conn, :user_token)
@@ -31,12 +35,13 @@ defmodule SnowPortalWeb.UserSessionControllerTest do
           "user" => %{
             "user_name" => user.user_name,
             "password" => valid_user_password(),
-            "remember_me" => "true"
+            "remember_me" => "true",
+            "login_as" => "username"
           }
         })
 
       assert conn.resp_cookies["_snow_portal_web_user_remember_me"]
-      assert redirected_to(conn) == ~p"/"
+      assert redirected_to(conn) == ~p"/customer/dashboard"
     end
 
     test "logs the user in with return to", %{conn: conn, user: user} do
@@ -46,7 +51,8 @@ defmodule SnowPortalWeb.UserSessionControllerTest do
         |> post(~p"/users/log_in", %{
           "user" => %{
             "user_name" => user.user_name,
-            "password" => valid_user_password()
+            "password" => valid_user_password(),
+            "login_as" => "username"
           }
         })
 
@@ -61,11 +67,12 @@ defmodule SnowPortalWeb.UserSessionControllerTest do
           "_action" => "registered",
           "user" => %{
             "user_name" => user.user_name,
-            "password" => valid_user_password()
+            "password" => valid_user_password(),
+            "login_as" => "username"
           }
         })
 
-      assert redirected_to(conn) == ~p"/"
+      assert redirected_to(conn) == ~p"/customer/dashboard"
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Account created successfully"
     end
 
@@ -76,7 +83,8 @@ defmodule SnowPortalWeb.UserSessionControllerTest do
           "_action" => "password_updated",
           "user" => %{
             "user_name" => user.user_name,
-            "password" => valid_user_password()
+            "password" => valid_user_password(),
+            "login_as" => "username"
           }
         })
 
@@ -87,7 +95,11 @@ defmodule SnowPortalWeb.UserSessionControllerTest do
     test "redirects to login page with invalid credentials", %{conn: conn} do
       conn =
         post(conn, ~p"/users/log_in", %{
-          "user" => %{"user_name" => "invalid@email.com", "password" => "invalid_Password!1"}
+          "user" => %{
+            "user_name" => "invalid@email.com",
+            "password" => "invalid_Password!1",
+            "login_as" => "username"
+          }
         })
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) == "Invalid username or password"

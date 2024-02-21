@@ -11,12 +11,7 @@
           <th class="px-4 py-2 text-left">Email</th>
         </thead>
         <tbody>
-          <.live_component
-            :for={executive <- @executives}
-            module={ListRow}
-            id={executive.id}
-            user={executive}
-          />
+          <.live_component :for={user <- @users} module={ListRow} id={user.id} user={user} />
         </tbody>
       </table>
     </div>
