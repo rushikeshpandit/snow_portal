@@ -44,10 +44,8 @@ defmodule SnowPortalWeb.ConnCase do
   It stores an updated connection and a registered user in the
   test context.
   """
-  def register_and_log_in_user(%{conn: conn}) do
-    user = SnowPortal.AccountsFixtures.user_fixture()
-    %{conn: log_in_user(conn, user), user: user}
-  end
+  def register_and_log_in_user(%{conn: conn}),
+    do: %{conn: log_in_user(conn, user), user: SnowPortal.AccountsFixtures.user_fixture()}
 
   @doc """
   Logs the given `user` into the `conn`.
