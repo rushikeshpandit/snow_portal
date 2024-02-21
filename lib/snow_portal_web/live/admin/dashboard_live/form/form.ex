@@ -4,25 +4,20 @@ defmodule SnowPortalWeb.Admin.DashboardLive.Form do
   alias SnowPortal.Accounts
   alias SnowPortal.Accounts.User
 
-  def update(assigns, socket) do
-    form = to_form(%{"role" => assigns.type}, as: "user")
+  def update(assigns, socket),
+    do:
+      {:ok,
+       assign(socket,
+         form: to_form(%{"role" => assigns.type}, as: "user"),
+         trigger_submit: false,
+         check_errors: false
+       )}
 
-    {:ok, assign(socket, form: form, trigger_submit: false, check_errors: false)}
-  end
+  def handle_params(params, _uri, socket),
+    do: {:noreply, socket |> apply_action(socket.assigns.live_action, params)}
 
-  def handle_params(params, _uri, socket) do
-    live_action = socket.assigns.live_action
-
-    socket =
-      socket
-      |> apply_action(live_action, params)
-
-    {:noreply, socket}
-  end
-
-  defp apply_action(socket, :create, _params) do
-    socket |> assign(:page_title, "Admin Dashboard")
-  end
+  defp apply_action(socket, :create, _params),
+    do: socket |> assign(:page_title, "Admin Dashboard")
 
   def handle_event("save", %{"user" => user_params}, socket) do
     case Accounts.register_user(user_params) do
