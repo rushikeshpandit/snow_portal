@@ -11,7 +11,7 @@ defmodule SnowPortalWeb.HeaderComponent do
         <%= if @current_user do %>
           <%= if @current_user.role == :ADMIN do %>
             <li class="ml-6">
-              <.link href={~p"/"}>List Executives</.link>
+              <.link href={~p"/admin/list_executive"}>List Executives</.link>
             </li>
             <li class="ml-6">
               <.link href={~p"/"}>List Users</.link>
