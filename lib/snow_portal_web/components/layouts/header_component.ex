@@ -14,7 +14,7 @@ defmodule SnowPortalWeb.HeaderComponent do
               <.link href={~p"/admin/list_executive"}>List Executives</.link>
             </li>
             <li class="ml-6">
-              <.link href={~p"/"}>List Users</.link>
+              <.link href={~p"/admin/list_user"}>List Users</.link>
             </li>
           <% else %>
             <li class="ml-6">
