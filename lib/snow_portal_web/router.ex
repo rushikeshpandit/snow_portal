@@ -78,6 +78,7 @@ defmodule SnowPortalWeb.Router do
       on_mount: [{SnowPortalWeb.UserAuth, :ensure_authenticated}, SnowPortalWeb.RequireAdmin] do
       scope "/admin", Admin do
         live "/dashboard", DashboardLive.Index, :index
+        live "/create", DashboardLive.Form, :create
       end
     end
 
