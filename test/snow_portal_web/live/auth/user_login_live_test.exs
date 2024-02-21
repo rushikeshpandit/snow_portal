@@ -33,7 +33,12 @@ defmodule SnowPortalWeb.UserLoginLiveTest do
 
       form =
         form(lv, "#login_form",
-          user: %{user_name: user.user_name, password: password, remember_me: true}
+          user: %{
+            user_name: user.user_name,
+            password: password,
+            remember_me: true,
+            login_as: "username"
+          }
         )
 
       conn = submit_form(form, conn)
@@ -48,7 +53,12 @@ defmodule SnowPortalWeb.UserLoginLiveTest do
 
       form =
         form(lv, "#login_form",
-          user: %{user_name: "test@email.com", password: "123456", remember_me: true}
+          user: %{
+            user_name: "test@email.com",
+            password: "123456",
+            remember_me: true,
+            login_as: "username"
+          }
         )
 
       conn = submit_form(form, conn)
