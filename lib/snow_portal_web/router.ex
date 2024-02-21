@@ -79,6 +79,7 @@ defmodule SnowPortalWeb.Router do
       scope "/admin", Admin do
         live "/dashboard", DashboardLive.Index, :index
         live "/create", DashboardLive.Form, :create
+        live "/list_executive", ListLive.Executive.Index, :index
       end
     end
 

@@ -1,0 +1,21 @@
+<div>
+  <div>
+    <div class="container mx-auto pt-12">
+      <table class="w-full table-auto bg-white">
+        <thead>
+          <th class="px-4 py-2 text-left">First Name</th>
+          <th class="px-4 py-2 text-left">Last Name</th>
+          <th class="px-4 py-2 text-left">Email</th>
+        </thead>
+        <tbody>
+          <.live_component
+            :for={executive <- @executives}
+            module={ListRow}
+            id={executive.id}
+            user={executive}
+          />
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
