@@ -45,7 +45,7 @@ defmodule SnowPortalWeb.ConnCase do
   test context.
   """
   def register_and_log_in_user(%{conn: conn}),
-    do: %{conn: log_in_user(conn, user), user: SnowPortal.AccountsFixtures.user_fixture()}
+    do: %{conn: log_in_user(conn, user: SnowPortal.AccountsFixtures.user_fixture())}
 
   @doc """
   Logs the given `user` into the `conn`.

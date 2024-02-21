@@ -42,13 +42,7 @@ defmodule SnowPortalWeb.UserRegistrationLive do
             placeholder="Password"
             required
           />
-          <.input
-            field={@form[:role]}
-            type="select"
-            label="Role"
-            options={["USER", "ADMIN", "EXECUTIVE"]}
-            required
-          />
+          <.input field={@form[:role]} type="select" label="Role" options={@roles} required />
         </div>
         <:actions>
           <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
@@ -60,10 +54,11 @@ defmodule SnowPortalWeb.UserRegistrationLive do
 
   def mount(_params, _session, socket) do
     changeset = Accounts.change_user_registration(%User{})
+    roles = Accounts.list_user_role_types()
 
     socket =
       socket
-      |> assign(trigger_submit: false, check_errors: false)
+      |> assign(trigger_submit: false, check_errors: false, roles: roles)
       |> assign_form(changeset)
 
     {:ok, socket, temporary_assigns: [form: nil]}

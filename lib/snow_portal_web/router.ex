@@ -71,6 +71,12 @@ defmodule SnowPortalWeb.Router do
 
       scope "/customer", Customer, as: :customer do
         live "/dashboard", DashboardLive.Index, :index
+        live "/tickets", TicketLive.Index, :index
+        live "/tickets/new", TicketLive.Index, :new
+        live "/tickets/:id/edit", TicketLive.Index, :edit
+
+        live "/tickets/:id", TicketLive.Show, :show
+        live "/tickets/:id/show/edit", TicketLive.Show, :edit
       end
     end
 
