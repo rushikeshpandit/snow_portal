@@ -21,7 +21,13 @@ defmodule SnowPortal.TicketsTest do
     end
 
     test "create_ticket/1 with valid data creates a ticket" do
-      valid_attrs = %{priority: "some priority", type: "some type", description: "some description", title: "some title", attachments: "some attachments"}
+      valid_attrs = %{
+        priority: "some priority",
+        type: "some type",
+        description: "some description",
+        title: "some title",
+        attachments: "some attachments"
+      }
 
       assert {:ok, %Ticket{} = ticket} = Tickets.create_ticket(valid_attrs)
       assert ticket.priority == "some priority"
@@ -37,7 +43,14 @@ defmodule SnowPortal.TicketsTest do
 
     test "update_ticket/2 with valid data updates the ticket" do
       ticket = ticket_fixture()
-      update_attrs = %{priority: "some updated priority", type: "some updated type", description: "some updated description", title: "some updated title", attachments: "some updated attachments"}
+
+      update_attrs = %{
+        priority: "some updated priority",
+        type: "some updated type",
+        description: "some updated description",
+        title: "some updated title",
+        attachments: "some updated attachments"
+      }
 
       assert {:ok, %Ticket{} = ticket} = Tickets.update_ticket(ticket, update_attrs)
       assert ticket.priority == "some updated priority"
