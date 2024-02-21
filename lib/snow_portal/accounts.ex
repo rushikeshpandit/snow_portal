@@ -362,4 +362,6 @@ defmodule SnowPortal.Accounts do
     |> where([u], u.role == ^to_string(params[:role]))
     |> Repo.all()
   end
+
+  def list_user_role_types, do: Ecto.Enum.values(User, :role)
 end
