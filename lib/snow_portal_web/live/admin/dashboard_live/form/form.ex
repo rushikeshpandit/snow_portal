@@ -5,25 +5,10 @@ defmodule SnowPortalWeb.Admin.DashboardLive.Form do
   alias SnowPortal.Accounts.User
 
   def update(assigns, socket) do
-    IO.inspect(assigns, label: "update assigns ***** ")
-    IO.inspect(socket, label: "update socket ***** ")
     form = to_form(%{"role" => assigns.type}, as: "user")
 
     {:ok, assign(socket, form: form, trigger_submit: false, check_errors: false)}
   end
-
-  # def mount(params, session, socket) do
-  #   IO.inspect(params, label: "mount params ***** ")
-  #   IO.inspect(session, label: "mount session ***** ")
-  #   changeset = Accounts.change_user_registration(%User{})
-
-  #   socket =
-  #     socket
-  #     |> assign(trigger_submit: false, check_errors: false)
-  #     |> assign_form(changeset)
-
-  #   {:ok, socket}
-  # end
 
   def handle_params(params, _uri, socket) do
     live_action = socket.assigns.live_action
