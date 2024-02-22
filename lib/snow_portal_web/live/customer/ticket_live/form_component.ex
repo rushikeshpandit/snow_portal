@@ -1,6 +1,5 @@
 defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
   use SnowPortalWeb, :live_component
-  import Phoenix.Naming, only: [humanize: 1]
 
   alias SnowPortal.Tickets
 
@@ -19,11 +18,11 @@ defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:title]} type="text" label="Title" />
+        <.input field={@form[:title]} type="text" label="Title" required />
         <.input field={@form[:description]} type="text" label="Description" />
-        <.input field={@form[:priority]} type="text" label="Priority" />
-        <.input field={@form[:attachments]} type="text" label="Attachments" />
+        <.input field={@form[:priority]} type="select" label="Priority" options={@priority} required />
         <.input field={@form[:type]} type="select" label="Type" options={@types} required />
+        <.input field={@form[:attachments]} type="text" label="Attachments" />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Ticket</.button>
@@ -37,11 +36,13 @@ defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
   def update(%{ticket: ticket} = assigns, socket) do
     changeset = Tickets.change_ticket(ticket)
     types = Tickets.list_user_role_types()
+    priority = Tickets.list_ticket_priority_types()
 
     {:ok,
      socket
      |> assign(assigns)
      |> assign(:types, types)
+     |> assign(:priority, priority)
      |> assign_form(changeset)}
   end
 
