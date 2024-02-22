@@ -23,7 +23,7 @@ defmodule SnowPortalWeb.HeaderComponent do
     """
   end
 
-  defp get_menu_list(%{role: :ADMIN, email: email} = assigns) do
+  defp get_menu_list(%{role: :ADMIN} = assigns) do
     ~H"""
     <li class="ml-6">
       <.link href={~p"/admin/list_executive"}>List Executives</.link>
@@ -34,11 +34,11 @@ defmodule SnowPortalWeb.HeaderComponent do
     <li class="ml-6">
       <.link href={~p"/"}>List Tickets</.link>
     </li>
-    <.get_common_menu email={email} />
+    <.get_common_menu email={@email} />
     """
   end
 
-  defp get_menu_list(%{role: :USER, email: email} = assigns) do
+  defp get_menu_list(%{role: :USER} = assigns) do
     ~H"""
     <li class="ml-6">
       <.link href={~p"/customer/tickets/new"}>Create Ticket</.link>
@@ -46,20 +46,20 @@ defmodule SnowPortalWeb.HeaderComponent do
     <li class="ml-6">
       <.link href={~p"/customer/tickets"}>Manage Tickets</.link>
     </li>
-    <.get_common_menu email={email} />
+    <.get_common_menu email={@email} />
     """
   end
 
-  defp get_menu_list(%{role: :EXECUTIVE, email: email} = assigns) do
+  defp get_menu_list(%{role: :EXECUTIVE} = assigns) do
     ~H"""
     <li class="ml-6">
       <.link href={~p"/"}>List Tickets</.link>
     </li>
-    <.get_common_menu email={email} />
+    <.get_common_menu email={@email} />
     """
   end
 
-  defp get_common_menu(%{email: email} = assigns) do
+  defp get_common_menu(assigns) do
     ~H"""
     <li class="ml-6">
       <.link href={~p"/users/settings"}>Settings</.link>
