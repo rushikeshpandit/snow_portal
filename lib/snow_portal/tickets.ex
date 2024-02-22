@@ -103,4 +103,6 @@ defmodule SnowPortal.Tickets do
   end
 
   def list_user_role_types, do: Ecto.Enum.values(Ticket, :type)
+
+  def list_ticket_priority_types, do: Ecto.Enum.values(Ticket, :priority)
 end
