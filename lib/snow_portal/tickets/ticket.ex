@@ -3,10 +3,11 @@ defmodule SnowPortal.Tickets.Ticket do
   import Ecto.Changeset
 
   @type_values ~w/INCIDENT SERVICE_REQUEST CHANGE_REQUEST/a
+  @priority_type_values ~w/LOW MEDIUM HIGH CRITICAL/a
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "tickets" do
-    field :priority, :string
+    field :priority, Ecto.Enum, values: @priority_type_values, default: :LOW
     field :type, Ecto.Enum, values: @type_values, default: :INCIDENT
     field :description, :string
     field :title, :string
