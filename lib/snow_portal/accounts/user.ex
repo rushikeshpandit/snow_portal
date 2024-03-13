@@ -1,4 +1,5 @@
 defmodule SnowPortal.Accounts.User do
+  alias SnowPortal.Tickets.Ticket
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -16,6 +17,8 @@ defmodule SnowPortal.Accounts.User do
     field :last_name, :string
     field :user_name, :string
     field :role, Ecto.Enum, values: @role_values, default: :USER
+
+    has_many :ticket, Ticket
 
     timestamps(type: :utc_datetime)
   end
