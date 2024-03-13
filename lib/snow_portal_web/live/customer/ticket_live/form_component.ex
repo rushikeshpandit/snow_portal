@@ -3,37 +3,13 @@ defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
 
   alias SnowPortal.Tickets
 
-  @impl true
-  def render(assigns) do
-    ~H"""
-    <div>
-      <.header>
-        <%= @title %>
-      </.header>
-
-      <.simple_form
-        for={@form}
-        id="ticket-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
-        <.input field={@form[:title]} type="text" label="Title" required />
-        <.input field={@form[:description]} type="text" label="Description" />
-        <.input field={@form[:priority]} type="select" label="Priority" options={@priority} required />
-        <.input field={@form[:type]} type="select" label="Type" options={@types} required />
-        <.input field={@form[:attachments]} type="text" label="Attachments" />
-
-        <:actions>
-          <.button phx-disable-with="Saving...">Save Ticket</.button>
-        </:actions>
-      </.simple_form>
-    </div>
-    """
-  end
+  @upload_options [
+    accept: ~w/.jpg .jpeg .png .svg .doc .docx .txt .rar .zip .pdf/,
+    max_entries: 10
+  ]
 
   @impl true
-  def update(%{ticket: ticket} = assigns, socket) do
+  def update(%{ticket: ticket, current_user: current_user} = assigns, socket) do
     changeset = Tickets.change_ticket(ticket)
     types = Tickets.list_user_role_types()
     priority = Tickets.list_ticket_priority_types()
@@ -43,7 +19,9 @@ defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
      |> assign(assigns)
      |> assign(:types, types)
      |> assign(:priority, priority)
-     |> assign_form(changeset)}
+     |> assign(:current_user, current_user)
+     |> assign_form(changeset)
+     |> allow_upload(:attachments, @upload_options)}
   end
 
   @impl true
@@ -60,8 +38,19 @@ defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
     save_ticket(socket, socket.assigns.action, ticket_params)
   end
 
+  def handle_event("cancel", %{"ref" => ref}, socket) do
+    {:noreply, cancel_upload(socket, :image_url, ref)}
+  end
+
+  def handle_event("validate", _params, socket) do
+    {:noreply, socket}
+  end
+
   defp save_ticket(socket, :edit, ticket_params) do
-    case Tickets.update_ticket(socket.assigns.ticket, ticket_params) do
+    {attachments, []} = uploaded_entries(socket, :attachments)
+    images = Enum.map(attachments, &%{image: &1})
+
+    case Tickets.update_ticket(ticket_params.assigns.ticket, ticket_params) do
       {:ok, ticket} ->
         notify_parent({:saved, ticket})
 
@@ -76,6 +65,29 @@ defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
   end
 
   defp save_ticket(socket, :new, ticket_params) do
+    attachments =
+      consume_uploaded_entries(socket, :attachments, fn %{path: path}, _entry ->
+        dest =
+          Path.join(Application.app_dir(:snow_portal, "priv/static/uploads"), Path.basename(path))
+
+        # You will need to create `priv/static/uploads` for `File.cp!/2` to work.
+        File.cp!(path, dest)
+        {:ok, ~p"/uploads/#{Path.basename(dest)}"}
+      end)
+
+    user_id = socket.assigns.current_user.id
+
+    attachments =
+      Enum.map(
+        attachments,
+        &%{
+          image_url: &1,
+          user_id: user_id
+        }
+      )
+
+    ticket_params = Map.put(ticket_params, "attachments", attachments)
+
     case Tickets.create_ticket(ticket_params) do
       {:ok, ticket} ->
         notify_parent({:saved, ticket})
@@ -95,4 +107,8 @@ defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
+
+  defp error_to_string(:too_large), do: "Too large"
+  defp error_to_string(:too_many_files), do: "You have selected too many files"
+  defp error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
 end
