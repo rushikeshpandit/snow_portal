@@ -1,4 +1,6 @@
 defmodule SnowPortal.Tickets.Ticket do
+  alias SnowPortal.Accounts.User
+  alias SnowPortal.TicketImages
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -11,8 +13,9 @@ defmodule SnowPortal.Tickets.Ticket do
     field :type, Ecto.Enum, values: @type_values, default: :INCIDENT
     field :description, :string
     field :title, :string
-    field :attachments, :string
-    field :user_id, :binary_id
+
+    belongs_to :user, User
+    has_many :attachments, TicketImages, on_replace: :delete_if_exists, on_delete: :delete_all
 
     timestamps(type: :utc_datetime)
   end
@@ -20,7 +23,8 @@ defmodule SnowPortal.Tickets.Ticket do
   @doc false
   def changeset(ticket, attrs) do
     ticket
-    |> cast(attrs, [:type, :title, :description, :priority, :attachments])
-    |> validate_required([:type, :title, :description, :priority, :attachments])
+    |> cast(attrs, [:type, :title, :description, :priority])
+    |> validate_required([:type, :title, :description, :priority])
+    |> cast_assoc(:attachments, with: &TicketImages.changeset/2)
   end
 end
