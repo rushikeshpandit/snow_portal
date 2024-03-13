@@ -105,4 +105,12 @@ defmodule SnowPortal.Tickets do
   def list_user_role_types, do: Ecto.Enum.values(Ticket, :type)
 
   def list_ticket_priority_types, do: Ecto.Enum.values(Ticket, :priority)
+
+  def create_images(ticket_id, images) do
+    ticket_id
+    |> get_ticket!()
+    |> Repo.preload([:attachments])
+    |> Ticket.changeset(%{attachments: images})
+    |> Repo.update()
+  end
 end
