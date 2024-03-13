@@ -71,7 +71,9 @@ defmodule SnowPortal.MixProject do
       {:excoveralls, "~> 0.18", only: :test},
       {:sobelow, "~> 0.13", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
+      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:waffle, "~> 1.1"},
+      {:waffle_ecto, "~> 0.0.11"}
     ]
   end
 
