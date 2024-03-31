@@ -19,12 +19,11 @@ defmodule SnowPortal.Repo.Migrations.CreateTickets do
       add :title, :string
       add :description, :string
       add :priority, :priority_types, default: "LOW", null: false
-      add :attachments, :string
-      add :user_id, references(:users, on_delete: :nothing, type: :binary_id)
+
+      add :user_id,
+          references(:users, on_delete: :delete_all, on_update: :update_all, type: :binary_id)
 
       timestamps(type: :utc_datetime)
     end
-
-    create index(:tickets, [:user_id])
   end
 end
