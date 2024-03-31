@@ -1,4 +1,7 @@
 defmodule SnowPortal.Accounts.User do
+  alias SnowPortal.Tickets.TicketHistory
+  alias SnowPortal.Tickets.TicketComments
+  alias SnowPortal.TicketAttachments
   alias SnowPortal.Tickets.Ticket
   use Ecto.Schema
   import Ecto.Changeset
@@ -18,7 +21,17 @@ defmodule SnowPortal.Accounts.User do
     field :user_name, :string
     field :role, Ecto.Enum, values: @role_values, default: :USER
 
-    has_many :ticket, Ticket
+    has_many :ticket, Ticket, on_replace: :delete_if_exists, on_delete: :delete_all
+
+    has_many :ticket_attachment, TicketAttachments,
+      on_replace: :delete_if_exists,
+      on_delete: :delete_all
+
+    has_many :ticket_comment, TicketComments,
+      on_replace: :delete_if_exists,
+      on_delete: :delete_all
+
+    has_many :ticket_history, TicketHistory, on_replace: :delete_if_exists, on_delete: :delete_all
 
     timestamps(type: :utc_datetime)
   end
