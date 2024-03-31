@@ -1,6 +1,8 @@
 defmodule SnowPortal.Tickets.Ticket do
+  alias SnowPortal.Tickets.TicketHistory
+  alias SnowPortal.Tickets.TicketComments
   alias SnowPortal.Accounts.User
-  alias SnowPortal.TicketImages
+  alias SnowPortal.TicketAttachments
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -15,7 +17,16 @@ defmodule SnowPortal.Tickets.Ticket do
     field :title, :string
 
     belongs_to :user, User
-    has_many :attachments, TicketImages, on_replace: :delete_if_exists, on_delete: :delete_all
+
+    has_many :ticket_attachments, TicketAttachments,
+      on_replace: :delete_if_exists,
+      on_delete: :delete_all
+
+    has_many :ticket_comment, TicketComments,
+      on_replace: :delete_if_exists,
+      on_delete: :delete_all
+
+    has_many :ticket_history, TicketHistory, on_replace: :delete_if_exists, on_delete: :delete_all
 
     timestamps(type: :utc_datetime)
   end
