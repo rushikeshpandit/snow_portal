@@ -2,7 +2,7 @@ defmodule SnowPortal.Tickets.Ticket do
   alias SnowPortal.Tickets.TicketHistory
   alias SnowPortal.Tickets.TicketComments
   alias SnowPortal.Accounts.User
-  alias SnowPortal.TicketAttachments
+  alias SnowPortal.Tickets.TicketAttachments
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -34,8 +34,8 @@ defmodule SnowPortal.Tickets.Ticket do
   @doc false
   def changeset(ticket, attrs) do
     ticket
-    |> cast(attrs, [:type, :title, :description, :priority])
-    |> validate_required([:type, :title, :description, :priority])
-    |> cast_assoc(:attachments, with: &TicketImages.changeset/2)
+    |> cast(attrs, [:type, :title, :description, :priority, :user_id])
+    |> validate_required([:type, :title, :description, :priority, :user_id])
+    |> cast_assoc(:ticket_attachments, with: &TicketAttachments.changeset/2)
   end
 end

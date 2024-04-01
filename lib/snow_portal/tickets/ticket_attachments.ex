@@ -1,4 +1,4 @@
-defmodule SnowPortal.TicketAttachments do
+defmodule SnowPortal.Tickets.TicketAttachments do
   alias SnowPortal.Accounts.User
   alias SnowPortal.Tickets.Ticket
   alias SnowPortal.TicketPhoto
@@ -18,12 +18,8 @@ defmodule SnowPortal.TicketAttachments do
 
   @doc false
   def changeset(ticket_attachments, attrs) do
-    IO.inspect(ticket_attachments, label: "ticket_attachments ***** ")
-    IO.inspect(attrs, label: "attrs ***** ")
-
     ticket_attachments
-    |> cast(attrs, [:ticket_id, :user_id, :image_url])
-    |> validate_required([:image_url])
+    |> cast(attrs, [:ticket_id, :user_id])
     |> cast_attachments(attrs, [:image_url], allow_paths: true)
   end
 end
