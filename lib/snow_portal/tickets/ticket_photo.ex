@@ -4,16 +4,17 @@ defmodule SnowPortal.TicketPhoto do
 
   @extension_whitelist ~w(.jpg .jpeg .png .svg .doc .docx .txt .rar .zip .pdf)
 
-  def validate({file, _}) do
-    file_extension = file.file_name |> Path.extname() |> String.downcase()
-
-    case Enum.member?(@extension_whitelist, file_extension) do
-      true -> :ok
-      false -> {:error, "file type is invalid"}
-    end
+  def filename(version, {file, post}) do
+    # It is desirable for this name to be unique
+    "#{file.file_name}_#{post.ticket_id}_#{version}"
   end
 
-  def storage_dir(_, {_file, ticket_images}) do
-    "uploads/ticket_image/#{ticket_images.ticket_id}"
+  def validate(_version, {file, _scope}) do
+    file_extension =
+      file.file_name
+      |> Path.extname()
+      |> String.downcase()
+
+    Enum.member?(@extension_whitelist, file_extension)
   end
 end
