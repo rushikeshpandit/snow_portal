@@ -14,7 +14,12 @@
   <:item title="Description"><%= @ticket.description %></:item>
   <:item title="Priority"><%= @ticket.priority %></:item>
   <:item :for={attachment <- @ticket_attachments} title="attachment">
-    <img src={attachment} />
+    <div class="items-center flex flex-col">
+      <img class="h-auto max-w-xs" src={attachment} />
+      <figcaption class="mt-2 text-sm text-center text-red-500 dark:text-gray-400">
+        <%= attachment |> Path.basename() %>
+      </figcaption>
+    </div>
   </:item>
 </.list>
 
@@ -27,8 +32,9 @@
   on_cancel={JS.patch(~p"/customer/tickets/#{@ticket}")}
 >
   <.live_component
-    module={SnowPortalWeb.Customer.TicketLive.FormComponentFormComponent}
+    module={SnowPortalWeb.Customer.TicketLive.FormComponent}
     id={@ticket.id}
+    current_user={@current_user}
     title={@page_title}
     action={@live_action}
     ticket={@ticket}
