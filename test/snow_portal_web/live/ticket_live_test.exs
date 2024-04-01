@@ -9,16 +9,22 @@ defmodule SnowPortalWeb.TicketLiveTest do
     type: "INCIDENT",
     description: "some description",
     title: "some title",
-    attachments: "some attachments"
+    ticket_attachments: "some attachments"
   }
   @update_attrs %{
     priority: "some updated priority",
     type: "SERVICE_REQUEST",
     description: "some updated description",
     title: "some updated title",
-    attachments: "some updated attachments"
+    ticket_attachments: "some updated attachments"
   }
-  @invalid_attrs %{priority: nil, type: nil, description: nil, title: nil, attachments: nil}
+  @invalid_attrs %{
+    priority: nil,
+    type: nil,
+    description: nil,
+    title: nil,
+    ticket_attachments: nil
+  }
 
   defp create_ticket(_) do
     ticket = ticket_fixture()
