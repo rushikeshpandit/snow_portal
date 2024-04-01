@@ -18,9 +18,6 @@ defmodule SnowPortal.Tickets.TicketHistory do
   end
 
   def changeset(ticket_history, attrs) do
-    IO.inspect(ticket_history, label: "ticket_history ***** ")
-    IO.inspect(attrs, label: "attrs ***** ")
-
     ticket_history
     |> cast(attrs, [:ticket_id, :user_id, :ticket_status])
     |> validate_required([:ticket_status])

@@ -16,9 +16,6 @@ defmodule SnowPortal.Tickets.TicketComments do
   end
 
   def changeset(ticket_comments, attrs) do
-    IO.inspect(ticket_comments, label: "ticket_comments ***** ")
-    IO.inspect(attrs, label: "attrs ***** ")
-
     ticket_comments
     |> cast(attrs, [:ticket_id, :user_id, :comment])
     |> validate_required([:comment])
