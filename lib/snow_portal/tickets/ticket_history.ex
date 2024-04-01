@@ -12,8 +12,7 @@ defmodule SnowPortal.Tickets.TicketHistory do
     field :ticket_status, Ecto.Enum, values: @status_values, default: :CREATED, null: false
 
     belongs_to :ticket, Ticket
-    belongs_to :previous_user, User
-    belongs_to :current_user, User
+    belongs_to :user, User
 
     timestamps(type: :utc_datetime)
   end
@@ -23,7 +22,7 @@ defmodule SnowPortal.Tickets.TicketHistory do
     IO.inspect(attrs, label: "attrs ***** ")
 
     ticket_history
-    |> cast(attrs, [:ticket_id, :previous_user_id, :current_user_id, :ticket_status])
+    |> cast(attrs, [:ticket_id, :user_id, :ticket_status])
     |> validate_required([:ticket_status])
   end
 end
