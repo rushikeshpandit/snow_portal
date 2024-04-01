@@ -13,6 +13,9 @@
   <:item title="Title"><%= @ticket.title %></:item>
   <:item title="Description"><%= @ticket.description %></:item>
   <:item title="Priority"><%= @ticket.priority %></:item>
+  <:item :for={attachment <- @ticket_attachments} title="attachment">
+    <img src={attachment} />
+  </:item>
 </.list>
 
 <.back navigate={~p"/customer/tickets"}>Back to tickets</.back>
