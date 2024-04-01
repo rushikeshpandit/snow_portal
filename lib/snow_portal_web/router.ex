@@ -87,6 +87,8 @@ defmodule SnowPortalWeb.Router do
         live "/create", DashboardLive.Form, :create
         live "/list_executive", ListLive.Executive.Index, :index
         live "/list_user", ListLive.User.Index, :index
+        live "/list_tickets", ListLive.Tickets.Index, :index
+        live "/get_ticket/:id", ListLive.Tickets.Show, :show
       end
     end
 
