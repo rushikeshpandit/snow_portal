@@ -32,7 +32,7 @@ defmodule SnowPortalWeb.HeaderComponent do
       <.link href={~p"/admin/list_user"}>List Users</.link>
     </li>
     <li class="ml-6">
-      <.link href={~p"/"}>List Tickets</.link>
+      <.link href={~p"/admin/list_tickets"}>List Tickets</.link>
     </li>
     <.get_common_menu email={@email} />
     """
