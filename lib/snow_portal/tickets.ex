@@ -18,7 +18,7 @@ defmodule SnowPortal.Tickets do
 
   """
   def list_tickets do
-    Repo.all(Ticket)
+    Repo.all(Ticket) |> Repo.preload([:ticket_attachments, :user])
   end
 
   @doc """
@@ -35,7 +35,7 @@ defmodule SnowPortal.Tickets do
       ** (Ecto.NoResultsError)
 
   """
-  def get_ticket!(id), do: Repo.get!(Ticket, id)
+  def get_ticket!(id), do: Repo.get!(Ticket, id) |> Repo.preload([:ticket_attachments, :user])
 
   @doc """
   Creates a ticket.
@@ -103,4 +103,14 @@ defmodule SnowPortal.Tickets do
   end
 
   def list_user_role_types, do: Ecto.Enum.values(Ticket, :type)
+
+  def list_ticket_priority_types, do: Ecto.Enum.values(Ticket, :priority)
+
+  def create_images(ticket_id, images) do
+    ticket_id
+    |> get_ticket!()
+    |> Repo.preload([:ticket_attachments])
+    |> Ticket.changeset(%{ticket_attachments: images})
+    |> Repo.update()
+  end
 end

@@ -11,7 +11,7 @@ defmodule SnowPortal.TicketsFixtures do
     {:ok, ticket} =
       attrs
       |> Enum.into(%{
-        attachments: "some attachments",
+        ticket_attachments: "some attachments",
         description: "some description",
         priority: "some priority",
         title: "some title",

@@ -8,7 +8,13 @@ defmodule SnowPortal.TicketsTest do
 
     import SnowPortal.TicketsFixtures
 
-    @invalid_attrs %{priority: nil, type: nil, description: nil, title: nil, attachments: nil}
+    @invalid_attrs %{
+      priority: nil,
+      type: nil,
+      description: nil,
+      title: nil,
+      ticket_attachments: nil
+    }
 
     test "list_tickets/0 returns all tickets" do
       ticket = ticket_fixture()
@@ -26,7 +32,7 @@ defmodule SnowPortal.TicketsTest do
         type: "some type",
         description: "some description",
         title: "some title",
-        attachments: "some attachments"
+        ticket_attachments: "some attachments"
       }
 
       assert {:ok, %Ticket{} = ticket} = Tickets.create_ticket(valid_attrs)
@@ -34,7 +40,7 @@ defmodule SnowPortal.TicketsTest do
       assert ticket.type == "some type"
       assert ticket.description == "some description"
       assert ticket.title == "some title"
-      assert ticket.attachments == "some attachments"
+      assert ticket.ticket_attachments == "some attachments"
     end
 
     test "create_ticket/1 with invalid data returns error changeset" do
@@ -49,7 +55,7 @@ defmodule SnowPortal.TicketsTest do
         type: "some updated type",
         description: "some updated description",
         title: "some updated title",
-        attachments: "some updated attachments"
+        ticket_attachments: "some updated attachments"
       }
 
       assert {:ok, %Ticket{} = ticket} = Tickets.update_ticket(ticket, update_attrs)
@@ -57,7 +63,7 @@ defmodule SnowPortal.TicketsTest do
       assert ticket.type == "some updated type"
       assert ticket.description == "some updated description"
       assert ticket.title == "some updated title"
-      assert ticket.attachments == "some updated attachments"
+      assert ticket.ticket_attachments == "some updated attachments"
     end
 
     test "update_ticket/2 with invalid data returns error changeset" do

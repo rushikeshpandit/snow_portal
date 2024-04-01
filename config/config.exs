@@ -11,6 +11,12 @@ config :snow_portal,
   ecto_repos: [SnowPortal.Repo],
   generators: [timestamp_type: :utc_datetime, binary_id: true]
 
+# Waffle storage setup
+config :waffle,
+  storage: Waffle.Storage.Local,
+  storage_dir_prefix: "priv/static",
+  storage_dir: "uploads"
+
 # Configures the endpoint
 config :snow_portal, SnowPortalWeb.Endpoint,
   url: [host: "localhost"],
