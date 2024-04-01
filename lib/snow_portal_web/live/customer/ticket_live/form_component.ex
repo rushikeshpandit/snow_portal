@@ -21,7 +21,7 @@ defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
      |> assign(:priority, priority)
      |> assign(:current_user, current_user)
      |> assign_form(changeset)
-     |> allow_upload(:attachments, @upload_options)}
+     |> allow_upload(:ticket_attachments, @upload_options)}
   end
 
   @impl true
@@ -47,59 +47,19 @@ defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
   end
 
   defp save_ticket(socket, :edit, ticket_params) do
-    {attachments, []} = uploaded_entries(socket, :attachments)
-    images = Enum.map(attachments, &%{image: &1})
-
-    case Tickets.update_ticket(ticket_params.assigns.ticket, ticket_params) do
-      {:ok, ticket} ->
-        notify_parent({:saved, ticket})
-
-        {:noreply,
-         socket
-         |> put_flash(:info, "Ticket updated successfully")
-         |> push_patch(to: socket.assigns.patch)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign_form(socket, changeset)}
-    end
+    perform(
+      socket,
+      Tickets.update_ticket(socket.assigns.ticket, ticket_params),
+      "Ticket updated successfully"
+    )
   end
 
   defp save_ticket(socket, :new, ticket_params) do
-    attachments =
-      consume_uploaded_entries(socket, :attachments, fn %{path: path}, _entry ->
-        dest =
-          Path.join(Application.app_dir(:snow_portal, "priv/static/uploads"), Path.basename(path))
-
-        # You will need to create `priv/static/uploads` for `File.cp!/2` to work.
-        File.cp!(path, dest)
-        {:ok, ~p"/uploads/#{Path.basename(dest)}"}
-      end)
-
-    user_id = socket.assigns.current_user.id
-
-    attachments =
-      Enum.map(
-        attachments,
-        &%{
-          image_url: &1,
-          user_id: user_id
-        }
-      )
-
-    ticket_params = Map.put(ticket_params, "attachments", attachments)
-
-    case Tickets.create_ticket(ticket_params) do
-      {:ok, ticket} ->
-        notify_parent({:saved, ticket})
-
-        {:noreply,
-         socket
-         |> put_flash(:info, "Ticket created successfully")
-         |> push_patch(to: socket.assigns.patch)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign_form(socket, changeset)}
-    end
+    perform(
+      socket,
+      Tickets.create_ticket(ticket_params),
+      "Ticket created successfully"
+    )
   end
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do
@@ -111,4 +71,57 @@ defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
   defp error_to_string(:too_large), do: "Too large"
   defp error_to_string(:too_many_files), do: "You have selected too many files"
   defp error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
+
+  defp perform(socket, function_result, message) do
+    case function_result do
+      {:ok, ticket} ->
+        notify_parent({:saved, ticket})
+        {ticket_attachments, []} = uploaded_entries(socket, :ticket_attachments)
+        build_image_url(socket)
+
+        ticket_attachments =
+          Enum.map(ticket_attachments, fn attachment ->
+            "#{get_image_url(attachment)}"
+          end)
+
+        current_user = socket.assigns.current_user
+
+        ticket_attachments =
+          Enum.map(
+            ticket_attachments,
+            &%{image_url: &1, ticket_id: ticket.id, user_id: current_user.id}
+          )
+
+        Tickets.create_images(ticket.id, ticket_attachments)
+
+        socket =
+          socket
+          |> put_flash(:info, message)
+          |> push_patch(to: socket.assigns.patch)
+
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, form: to_form(changeset))}
+    end
+  end
+
+  defp get_file_name(entry) do
+    [ext | _] = MIME.extensions(entry.client_type)
+    "#{entry.uuid}.#{ext}"
+  end
+
+  def get_image_url(entry) do
+    "priv/static/uploads/#{get_file_name(entry)}"
+  end
+
+  defp build_image_url(socket) do
+    consume_uploaded_entries(socket, :ticket_attachments, fn meta, entry ->
+      file_name = get_file_name(entry)
+
+      dest = Path.join("priv/static/uploads", file_name)
+
+      {:ok, File.cp!(meta.path, dest)}
+    end)
+  end
 end
