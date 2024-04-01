@@ -15,16 +15,16 @@
     <.input field={@form[:priority]} type="select" label="Priority" options={@priority} required />
     <.input field={@form[:type]} type="select" label="Type" options={@types} required />
     <.input type="hidden" field={@form[:user_id]} value={@current_user.id} />
-    <div class="container" phx-drop-target={@uploads.attachments.ref}>
-      <.live_file_input upload={@uploads.attachments} /> or drag and drop
+    <div class="container" phx-drop-target={@uploads.ticket_attachments.ref}>
+      <.live_file_input upload={@uploads.ticket_attachments} /> or drag and drop
     </div>
     <div>
-      Add up to <%= @uploads.attachments.max_entries %> photos
-      (max <%= trunc(@uploads.attachments.max_file_size / 1_000_000) %> mb each)
+      Add up to <%= @uploads.ticket_attachments.max_entries %> photos
+      (max <%= trunc(@uploads.ticket_attachments.max_file_size / 1_000_000) %> mb each)
     </div>
 
     <article
-      :for={entry <- @uploads.attachments.entries}
+      :for={entry <- @uploads.ticket_attachments.entries}
       class="flex items-center justify-between"
       id={entry.ref}
     >
@@ -34,7 +34,7 @@
       </figure>
       <div class="flex flex-col w-full items-center p-8">
         <p
-          :for={err <- upload_errors(@uploads.attachments, entry)}
+          :for={err <- upload_errors(@uploads.ticket_attachments, entry)}
           class="text-red-500 flex flex-col"
         >
           <%= error_to_string(err) %>
