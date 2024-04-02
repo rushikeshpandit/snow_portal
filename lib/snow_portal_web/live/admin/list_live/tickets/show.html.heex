@@ -2,6 +2,7 @@
   Ticket <%= @ticket.id %>
   <:subtitle>This is a ticket record from your database.</:subtitle>
 </.header>
+<.back navigate={~p"/admin/list_tickets"}>Back to tickets</.back>
 
 <.list>
   <:item title="Type"><%= @ticket.type %></:item>
@@ -17,8 +18,6 @@
     </div>
   </:item>
 </.list>
-
-<.back navigate={~p"/admin/list_tickets"}>Back to tickets</.back>
 
 <.modal
   :if={@live_action == :edit}
