@@ -24,7 +24,7 @@
         </div>
       </figure>
     <% end %>
-    <.input type="hidden" field={@form[:user_id]} value={@current_user.id} />
+    <.input type="hidden" field={@form[:created_by_user_id]} value={@current_user.id} />
     <div class="container" phx-drop-target={@uploads.ticket_attachments.ref}>
       <.live_file_input upload={@uploads.ticket_attachments} /> or drag and drop
     </div>
