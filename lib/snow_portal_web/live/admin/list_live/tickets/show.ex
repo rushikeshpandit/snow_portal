@@ -1,4 +1,5 @@
 defmodule SnowPortalWeb.Admin.ListLive.Tickets.Show do
+  alias SnowPortal.Accounts
   use SnowPortalWeb, :live_view
   alias SnowPortal.TicketPhoto
   alias SnowPortal.Tickets
@@ -12,13 +13,13 @@ defmodule SnowPortalWeb.Admin.ListLive.Tickets.Show do
   def handle_params(%{"id" => id}, _, socket) do
     ticket = Tickets.get_ticket!(id)
     ticket_attachments = Enum.map(ticket.ticket_attachments, &get_attachment_image_url(&1))
-    IO.inspect(ticket, label: "handle_params ticket *****")
-    IO.inspect(ticket_attachments, label: "handle_params ticket_attachments *****")
+    executive_list = Accounts.list_users_by_role(role: :EXECUTIVE)
 
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:ticket, ticket)
+     |> assign(:executive_list, executive_list)
      |> assign(:ticket_attachments, ticket_attachments)}
   end
 
