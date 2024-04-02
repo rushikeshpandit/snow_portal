@@ -13,18 +13,28 @@ defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
     changeset = Tickets.change_ticket(ticket)
     types = Tickets.list_user_role_types()
     priority = Tickets.list_ticket_priority_types()
-    ticket_attachments = Enum.map(ticket.ticket_attachments, &get_attachment_image_url(&1))
 
-    {:ok,
-     socket
-     |> assign(assigns)
-     |> assign(:types, types)
-     |> assign(:priority, priority)
-     |> assign(:ticket, ticket)
-     |> assign(:ticket_attachments, ticket_attachments)
-     |> assign(:current_user, current_user)
-     |> assign_form(changeset)
-     |> allow_upload(:ticket_attachments, @upload_options)}
+    socket =
+      socket
+      |> assign(assigns)
+      |> assign(:types, types)
+      |> assign(:priority, priority)
+      |> assign(:ticket, ticket)
+      |> assign(:created_by_user_id, current_user)
+      |> assign_form(changeset)
+      |> allow_upload(:ticket_attachments, @upload_options)
+
+    if Ecto.assoc_loaded?(ticket.ticket_attachments) do
+      ticket_attachments = Enum.map(ticket.ticket_attachments, &get_attachment_image_url(&1))
+
+      {:ok,
+       socket
+       |> assign(:ticket_attachments, ticket_attachments)}
+    else
+      {:ok,
+       socket
+       |> assign(:ticket_attachments, nil)}
+    end
   end
 
   @impl true
