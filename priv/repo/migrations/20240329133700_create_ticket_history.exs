@@ -14,13 +14,17 @@ defmodule SnowPortal.Repo.Migrations.CreateTicketHistory do
       add :ticket_id,
           references(:tickets, on_delete: :delete_all, on_update: :update_all, type: :binary_id)
 
-      add :user_id,
-          references(:users, on_delete: :delete_all, on_update: :update_all, type: :binary_id)
+      add :previous_user_id,
+          references(:users, on_delete: :nothing, type: :binary_id)
+
+      add :updated_user_id,
+          references(:users, on_delete: :nothing, type: :binary_id)
 
       timestamps(type: :utc_datetime)
     end
 
     create index(:ticket_history, [:ticket_id])
-    create index(:ticket_history, [:user_id])
+    create index(:ticket_history, [:previous_user_id])
+    create index(:ticket_history, [:updated_user_id])
   end
 end
