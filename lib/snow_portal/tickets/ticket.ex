@@ -16,7 +16,8 @@ defmodule SnowPortal.Tickets.Ticket do
     field :description, :string
     field :title, :string
 
-    belongs_to :user, User
+    belongs_to :created_by_user, User, foreign_key: :created_by_user_id
+    belongs_to :assigned_to_user, User, foreign_key: :assigned_to_user_id
 
     has_many :ticket_attachments, TicketAttachments,
       on_replace: :delete_if_exists,
@@ -34,8 +35,21 @@ defmodule SnowPortal.Tickets.Ticket do
   @doc false
   def changeset(ticket, attrs) do
     ticket
-    |> cast(attrs, [:type, :title, :description, :priority, :user_id])
-    |> validate_required([:type, :title, :description, :priority, :user_id])
+    |> cast(attrs, [
+      :type,
+      :title,
+      :description,
+      :priority,
+      :created_by_user_id,
+      :assigned_to_user_id
+    ])
+    |> validate_required([
+      :type,
+      :title,
+      :description,
+      :priority,
+      :created_by_user_id
+    ])
     |> cast_assoc(:ticket_attachments, with: &TicketAttachments.changeset/2)
   end
 end

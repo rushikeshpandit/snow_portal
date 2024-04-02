@@ -13,13 +13,15 @@ defmodule SnowPortal.Tickets.TicketHistory do
 
     belongs_to :ticket, Ticket
     belongs_to :user, User
+    belongs_to :previous_user, User, foreign_key: :previous_user_id
+    belongs_to :updated_user, User, foreign_key: :updated_user_id
 
     timestamps(type: :utc_datetime)
   end
 
   def changeset(ticket_history, attrs) do
     ticket_history
-    |> cast(attrs, [:ticket_id, :user_id, :ticket_status])
+    |> cast(attrs, [:ticket_id, :previous_user_id, :updated_user_id, :ticket_status])
     |> validate_required([:ticket_status])
   end
 end
