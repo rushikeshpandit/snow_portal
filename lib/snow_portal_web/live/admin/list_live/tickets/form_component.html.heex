@@ -1,0 +1,21 @@
+<div>
+  <.simple_form
+    for={@form}
+    id="ticket-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+  >
+    <.input
+      field={@form[:executive_id]}
+      type="select"
+      label="Select Executive"
+      options={@executive_list}
+    />
+    <.input type="hidden" field={@form[:ticket_id]} value={@ticket.id} />
+
+    <:actions>
+      <.button phx-disable-with="Saving...">Save Ticket</.button>
+    </:actions>
+  </.simple_form>
+</div>

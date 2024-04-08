@@ -2,8 +2,22 @@
   Ticket <%= @ticket.id %>
   <:subtitle>This is a ticket record from your database.</:subtitle>
 </.header>
+<.back navigate={~p"/admin/list_tickets"}>Back to tickets</.back>
 
 <.list>
+  <:item title="Assign To">
+    <%= if !is_nil(@assigned_to_user_id) do %>
+      <%= @assigned_to_user_id.first_name <> " " <> @assigned_to_user_id.last_name %>
+    <% else %>
+      This ticket is not assigned to anyone.
+    <% end %>
+    <.live_component
+      module={SnowPortalWeb.Admin.ListLive.Tickets.FormComponent}
+      id={@ticket.id}
+      ticket={@ticket}
+      navigate={~p"/admin/list_tickets"}
+    />
+  </:item>
   <:item title="Type"><%= @ticket.type %></:item>
   <:item title="Title"><%= @ticket.title %></:item>
   <:item title="Description"><%= @ticket.description %></:item>
@@ -18,8 +32,6 @@
   </:item>
 </.list>
 
-<.back navigate={~p"/admin/list_tickets"}>Back to tickets</.back>
-
 <.modal
   :if={@live_action == :edit}
   id="ticket-modal"
@@ -27,11 +39,11 @@
   on_cancel={JS.patch(~p"/customer/tickets/#{@ticket}")}
 >
   <.live_component
-    module={SnowPortalWeb.Customer.TicketLive.FormComponentFormComponent}
+    module={SnowPortalWeb.Customer.TicketLive.FormComponent}
     id={@ticket.id}
     title={@page_title}
     action={@live_action}
     ticket={@ticket}
-    patch={~p"/customer/tickets/#{@ticket}"}
+    navigate={~p"/admin/list_tickets"}
   />
 </.modal>
