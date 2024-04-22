@@ -96,6 +96,8 @@ defmodule SnowPortalWeb.Router do
       on_mount: [{SnowPortalWeb.UserAuth, :ensure_authenticated}, SnowPortalWeb.RequireExecutive] do
       scope "/executive", Executive do
         live "/dashboard", DashboardLive.Index, :index
+        live "/tickets_list", ListLive.Tickets.Index, :index
+        live "/show_ticket/:id", ListLive.Tickets.Show, :show
       end
     end
   end
