@@ -30,7 +30,7 @@ defmodule SnowPortalWeb.Admin.ListLive.Tickets.Show do
     else
       {:noreply,
        socket
-       |> assign(:assigned_user_id, nil)}
+       |> assign(:assigned_to_user_id, nil)}
     end
   end
 
