@@ -1,0 +1,20 @@
+<.header>
+  Ticket <%= @ticket.id %>
+  <:subtitle>This is a ticket record from your database.</:subtitle>
+</.header>
+<.back navigate={~p"/executive/tickets_list"}>Back to tickets</.back>
+
+<.list>
+  <:item title="Type"><%= @ticket.type %></:item>
+  <:item title="Title"><%= @ticket.title %></:item>
+  <:item title="Description"><%= @ticket.description %></:item>
+  <:item title="Priority"><%= @ticket.priority %></:item>
+  <:item :for={attachment <- @ticket_attachments} title="attachment">
+    <div class="items-center flex flex-col">
+      <img class="h-auto max-w-xs" src={attachment} />
+      <figcaption class="mt-2 text-sm text-center text-red-500 dark:text-gray-400">
+        <%= attachment |> Path.basename() %>
+      </figcaption>
+    </div>
+  </:item>
+</.list>
