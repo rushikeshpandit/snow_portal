@@ -1,4 +1,4 @@
-defmodule SnowPortalWeb.Admin.ListLive.Tickets.Show do
+defmodule SnowPortalWeb.Executive.ListLive.Tickets.Show do
   alias SnowPortal.Accounts
   use SnowPortalWeb, :live_view
   alias SnowPortal.TicketPhoto
@@ -35,7 +35,6 @@ defmodule SnowPortalWeb.Admin.ListLive.Tickets.Show do
   end
 
   defp page_title(:show), do: "Show Ticket"
-  defp page_title(:edit), do: "Edit Ticket"
 
   defp get_attachment_image_url(attachment),
     do: TicketPhoto.url({attachment.image_url, attachment})

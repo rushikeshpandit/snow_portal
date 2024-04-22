@@ -53,7 +53,7 @@ defmodule SnowPortalWeb.HeaderComponent do
   defp get_menu_list(%{role: :EXECUTIVE} = assigns) do
     ~H"""
     <li class="ml-6">
-      <.link href={~p"/"}>List Tickets</.link>
+      <.link href={~p"/executive/tickets_list"}>List Tickets</.link>
     </li>
     <.get_common_menu email={@email} />
     """

@@ -26,3 +26,21 @@ Accounts.register_user(%{
   user_name: "executive",
   role: "EXECUTIVE"
 })
+
+Accounts.register_user(%{
+  email: "executive_one@mobilixir.com",
+  password: "Executive@Mobilixir11",
+  first_name: "Executive_One",
+  last_name: "Mobilixir",
+  user_name: "executive_one",
+  role: "EXECUTIVE"
+})
+
+Accounts.register_user(%{
+  email: "executive_two@mobilixir.com",
+  password: "Executive@Mobilixir11",
+  first_name: "Executive_Two",
+  last_name: "Mobilixir",
+  user_name: "executive_two",
+  role: "EXECUTIVE"
+})

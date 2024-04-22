@@ -23,6 +23,22 @@ defmodule SnowPortal.Tickets do
   end
 
   @doc """
+  Returns the list of tickets assigned to specific user.
+
+  ## Examples
+
+      iex> list_tickets_by_user(id)
+      [%Ticket{}, ...]
+
+  """
+  def list_tickets_by_user(id) do
+    Ticket
+    |> where([t], t.assigned_to_user_id == ^id)
+    |> Repo.all()
+    |> Repo.preload([:ticket_attachments, :created_by_user, :assigned_to_user])
+  end
+
+  @doc """
   Gets a single ticket.
 
   Raises `Ecto.NoResultsError` if the Ticket does not exist.
