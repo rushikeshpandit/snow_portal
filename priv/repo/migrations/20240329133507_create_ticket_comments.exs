@@ -2,7 +2,7 @@ defmodule SnowPortal.Repo.Migrations.CreateTicketComments do
   use Ecto.Migration
 
   def change do
-    create table(:ticket_comments, primary_key: false) do
+    create table(:ticket_comment, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :comment, :string
 
@@ -15,7 +15,7 @@ defmodule SnowPortal.Repo.Migrations.CreateTicketComments do
       timestamps(type: :utc_datetime)
     end
 
-    create index(:ticket_comments, [:ticket_id])
-    create index(:ticket_comments, [:user_id])
+    create index(:ticket_comment, [:ticket_id])
+    create index(:ticket_comment, [:user_id])
   end
 end

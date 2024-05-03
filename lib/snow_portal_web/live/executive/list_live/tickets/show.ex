@@ -3,6 +3,7 @@ defmodule SnowPortalWeb.Executive.ListLive.Tickets.Show do
   use SnowPortalWeb, :live_view
   alias SnowPortal.TicketPhoto
   alias SnowPortal.Tickets
+  alias SnowPortal.TicketComments
 
   @impl true
   def mount(_params, _session, socket) do
@@ -13,12 +14,14 @@ defmodule SnowPortalWeb.Executive.ListLive.Tickets.Show do
   def handle_params(%{"id" => id}, _, socket) do
     ticket = Tickets.get_ticket!(id)
     ticket_attachments = Enum.map(ticket.ticket_attachments, &get_attachment_image_url(&1))
+    comments = TicketComments.list_tickets_comments(id)
 
     socket =
       socket
       |> assign(:page_title, page_title(socket.assigns.live_action))
       |> assign(:ticket, ticket)
       |> assign(:ticket_attachments, ticket_attachments)
+      |> assign(:comments, comments)
 
     if !is_nil(ticket.assigned_to_user_id) do
       assigned_to_user_id = Accounts.get_user!(ticket.assigned_to_user_id)
@@ -32,6 +35,15 @@ defmodule SnowPortalWeb.Executive.ListLive.Tickets.Show do
        socket
        |> assign(:assigned_to_user_id, nil)}
     end
+  end
+
+  @impl true
+  def handle_info(
+        {SnowPortalWeb.Executive.ListLive.Tickets.FormComponent, {:save_comment, ticket_comment}},
+        socket
+      ) do
+    {:noreply,
+     socket |> assign(:comments, TicketComments.list_tickets_comments(ticket_comment.ticket_id))}
   end
 
   defp page_title(:show), do: "Show Ticket"

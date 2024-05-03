@@ -1,0 +1,17 @@
+<div>
+  <.simple_form
+    for={@form}
+    id="ticket-comment-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+  >
+    <.input field={@form[:comment]} type="textarea" label="" />
+    <.input type="hidden" field={@form[:ticket_id]} value={@ticket_id} />
+    <.input type="hidden" field={@form[:user_id]} value={@user_id} />
+
+    <:actions>
+      <.button phx-disable-with="Saving...">Add Comment</.button>
+    </:actions>
+  </.simple_form>
+</div>
