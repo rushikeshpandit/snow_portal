@@ -1,6 +1,6 @@
 defmodule SnowPortal.Accounts.User do
   alias SnowPortal.Tickets.TicketHistory
-  alias SnowPortal.Tickets.TicketComments
+  alias SnowPortal.Tickets.TicketComment
   alias SnowPortal.Tickets.TicketAttachments
   alias SnowPortal.Tickets.Ticket
   use Ecto.Schema
@@ -27,7 +27,7 @@ defmodule SnowPortal.Accounts.User do
       on_replace: :delete_if_exists,
       on_delete: :delete_all
 
-    has_many :ticket_comment, TicketComments,
+    has_many :ticket_comment, TicketComment,
       on_replace: :delete_if_exists,
       on_delete: :delete_all
 
