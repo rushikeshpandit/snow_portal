@@ -17,4 +17,21 @@
       </figcaption>
     </div>
   </:item>
+  <:item title="Comments">
+    <%= for comment <- @comments do %>
+      <.live_component
+        module={SnowPortalWeb.Executive.ListLive.Tickets.CommentComponent}
+        ticket_comment={comment}
+        id={comment.id}
+      />
+    <% end %>
+  </:item>
+  <:item title="Add Comment">
+    <.live_component
+      module={SnowPortalWeb.Executive.ListLive.Tickets.FormComponent}
+      id={@ticket.id}
+      current_user={@current_user}
+      patch={~p"/executive/show_ticket/#{@ticket}"}
+    />
+  </:item>
 </.list>
