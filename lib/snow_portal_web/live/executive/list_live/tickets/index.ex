@@ -18,9 +18,4 @@ defmodule SnowPortalWeb.Executive.ListLive.Tickets.Index do
     |> assign(:page_title, "Listing Tickets")
     |> assign(:ticket, nil)
   end
-
-  @impl true
-  def handle_info({SnowPortalWeb.Customer.TicketLive.FormComponent, {:saved, ticket}}, socket) do
-    {:noreply, stream_insert(socket, :tickets, ticket)}
-  end
 end
