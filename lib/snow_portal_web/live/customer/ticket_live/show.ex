@@ -1,6 +1,5 @@
 defmodule SnowPortalWeb.Customer.TicketLive.Show do
   alias SnowPortal.TicketComments
-  alias SnowPortal.Tickets.TicketComment
   use SnowPortalWeb, :live_view
   alias SnowPortal.TicketPhoto
   alias SnowPortal.Tickets
@@ -16,12 +15,14 @@ defmodule SnowPortalWeb.Customer.TicketLive.Show do
   def handle_params(%{"id" => id}, _, socket) do
     ticket = Tickets.get_ticket!(id)
     ticket_attachments = Enum.map(ticket.ticket_attachments, &get_attachment_image_url(&1))
+    comments = TicketComments.list_tickets_comments(id)
 
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:ticket, ticket)
-     |> assign(:ticket_attachments, ticket_attachments)}
+     |> assign(:ticket_attachments, ticket_attachments)
+     |> assign(:comments, comments)}
   end
 
   defp page_title(:show), do: "Show Ticket"

@@ -21,6 +21,29 @@
       </figcaption>
     </div>
   </:item>
+  <:item title="Comments">
+    <%= if @comments != nil do %>
+      <%= for comment  <- @comments do %>
+        <.live_component
+          module={SnowPortalWeb.Customer.TicketLive.CommentComponent}
+          ticket_comment={comment}
+          id={comment.id}
+        />
+      <% end %>
+    <% else %>
+      <div class="items-center flex">
+        <p class="text-lg">There are no comments.</p>
+      </div>
+    <% end %>
+  </:item>
+  <:item title="Add Comment">
+    <.live_component
+      module={SnowPortalWeb.Executive.ListLive.Tickets.FormComponent}
+      id={@ticket.id}
+      current_user={@current_user}
+      patch={~p"/executive/show_ticket/#{@ticket}"}
+    />
+  </:item>
 </.list>
 
 <.back navigate={~p"/customer/tickets"}>Back to tickets</.back>
