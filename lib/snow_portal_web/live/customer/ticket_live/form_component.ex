@@ -1,4 +1,5 @@
 defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
+  alias SnowPortal.NewTicket
   use SnowPortalWeb, :live_component
   alias SnowPortal.TicketPhoto
   alias SnowPortal.Tickets
@@ -106,6 +107,9 @@ defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
           )
 
         Tickets.create_images(ticket.id, ticket_attachments)
+
+        NewTicket.broadcast_new_ticket({:ok, ticket})
+        NewTicket.broadcast_update_ticket({:ok, ticket})
 
         socket =
           socket
