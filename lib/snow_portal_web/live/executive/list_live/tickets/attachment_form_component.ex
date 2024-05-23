@@ -1,5 +1,4 @@
-defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
-  alias SnowPortal.NewTicket
+defmodule SnowPortalWeb.Executive.ListLive.Tickets.AttachmentFormComponent do
   use SnowPortalWeb, :live_component
   alias SnowPortal.TicketPhoto
   alias SnowPortal.Tickets
@@ -12,15 +11,11 @@ defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
   @impl true
   def update(%{ticket: ticket, current_user: current_user} = assigns, socket) do
     changeset = Tickets.change_ticket(ticket)
-    types = Tickets.list_user_role_types()
-    priority = Tickets.list_ticket_priority_types()
 
     socket =
       socket
       |> assign(assigns)
-      |> assign(:types, types)
-      |> assign(:priority, priority)
-      |> assign(:ticket, ticket)
+      |> assign(:ticket_id, ticket.id)
       |> assign(:created_by_user_id, current_user)
       |> assign_form(changeset)
       |> allow_upload(:ticket_attachments, @upload_options)
@@ -107,9 +102,6 @@ defmodule SnowPortalWeb.Customer.TicketLive.FormComponent do
           )
 
         Tickets.create_images(ticket.id, ticket_attachments)
-
-        NewTicket.broadcast_new_ticket({:ok, ticket})
-        NewTicket.broadcast_update_ticket({:ok, ticket})
 
         socket =
           socket

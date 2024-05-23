@@ -34,4 +34,13 @@
       patch={~p"/executive/show_ticket/#{@ticket}"}
     />
   </:item>
+  <:item title="Add Attachments">
+    <.live_component
+      module={SnowPortalWeb.Executive.ListLive.Tickets.AttachmentFormComponent}
+      id={@ticket.id}
+      ticket={@ticket}
+      current_user={@current_user}
+      patch={~p"/executive/show_ticket/#{@ticket}"}
+    />
+  </:item>
 </.list>

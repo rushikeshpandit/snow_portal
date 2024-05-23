@@ -3,9 +3,15 @@ defmodule SnowPortalWeb.Customer.TicketLive.Index do
 
   alias SnowPortal.Tickets
   alias SnowPortal.Tickets.Ticket
+  alias SnowPortal.NewTicket
 
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket) do
+      NewTicket.subscribe_new_ticket()
+      NewTicket.subscribe_update_ticket()
+    end
+
     {:ok, stream(socket, :tickets, Tickets.list_tickets())}
   end
 
@@ -35,6 +41,14 @@ defmodule SnowPortalWeb.Customer.TicketLive.Index do
   @impl true
   def handle_info({SnowPortalWeb.Customer.TicketLive.FormComponent, {:saved, ticket}}, socket) do
     {:noreply, stream_insert(socket, :tickets, ticket)}
+  end
+
+  def handle_info({:new_ticket, _ticket}, socket) do
+    {:noreply, stream(socket, :tickets, Tickets.list_tickets())}
+  end
+
+  def handle_info({:update_ticket, _ticket}, socket) do
+    {:noreply, stream(socket, :tickets, Tickets.list_tickets())}
   end
 
   @impl true
