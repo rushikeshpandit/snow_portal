@@ -1,4 +1,5 @@
-defmodule SnowPortalWeb.Executive.ListLive.Tickets.FormComponent do
+defmodule SnowPortalWeb.Common.AddCommentComponent do
+  alias SnowPortal.NewComment
   alias SnowPortal.Tickets.TicketComment
   use SnowPortalWeb, :live_component
   alias SnowPortal.TicketComments
@@ -32,10 +33,8 @@ defmodule SnowPortalWeb.Executive.ListLive.Tickets.FormComponent do
       TicketComments.create_ticket_comment(ticket_comment_params)
 
     notify_parent({:save_comment, ticket_comment})
-
-    # socket
-    # |> put_flash(:info, "Comment saved successfully !!!")
-    # |> push_patch(to: socket.assigns.patch)
+    NewComment.broadcast_new_comment({:ok, ticket_comment})
+    NewComment.broadcast_update_comment({:ok, ticket_comment})
 
     {:noreply, socket}
   end

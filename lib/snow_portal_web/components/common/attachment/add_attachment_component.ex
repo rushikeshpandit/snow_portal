@@ -1,4 +1,4 @@
-defmodule SnowPortalWeb.Executive.ListLive.Tickets.AttachmentFormComponent do
+defmodule SnowPortalWeb.Common.AddAttachmentComponent do
   use SnowPortalWeb, :live_component
   alias SnowPortal.TicketPhoto
   alias SnowPortal.Tickets

@@ -16,12 +16,11 @@
     <.input field={@form[:type]} type="select" label="Type" options={@types} required />
     <%= if @ticket_attachments &&!is_nil(@ticket_attachments) do %>
       <figure :for={attachment <- @ticket_attachments}>
-        <div class="items-center flex flex-col">
-          <img class="h-auto max-w-xs" src={attachment} />
-          <figcaption class="mt-2 text-sm text-center text-red-500 dark:text-gray-400">
-            <%= attachment |> Path.basename() %>
-          </figcaption>
-        </div>
+        <.live_component
+          module={SnowPortalWeb.Common.AttachmentComponent}
+          ticket_attachment={attachment}
+          id={attachment}
+        />
       </figure>
     <% end %>
     <.input type="hidden" field={@form[:created_by_user_id]} value={@current_user.id} />

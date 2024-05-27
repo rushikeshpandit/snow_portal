@@ -22,13 +22,31 @@
   <:item title="Title"><%= @ticket.title %></:item>
   <:item title="Description"><%= @ticket.description %></:item>
   <:item title="Priority"><%= @ticket.priority %></:item>
-  <:item :for={attachment <- @ticket_attachments} title="attachment">
-    <div class="items-center flex flex-col">
-      <img class="h-auto max-w-xs" src={attachment} />
-      <figcaption class="mt-2 text-sm text-center text-red-500 dark:text-gray-400">
-        <%= attachment |> Path.basename() %>
-      </figcaption>
-    </div>
+  <:item title="Attachment">
+    <%= if @ticket_attachments &&!is_nil(@ticket_attachments) do %>
+      <figure :for={attachment <- @ticket_attachments}>
+        <.live_component
+          module={SnowPortalWeb.Common.AttachmentComponent}
+          ticket_attachment={attachment}
+          id={attachment}
+        />
+      </figure>
+    <% end %>
+  </:item>
+  <:item title="Comments">
+    <%= if @comments &&!is_nil(@comments) do %>
+      <%= for comment <- @comments do %>
+        <.live_component
+          module={SnowPortalWeb.Common.CommentComponent}
+          ticket_comment={comment}
+          id={comment.id}
+        />
+      <% end %>
+    <% else %>
+      <div class="items-center flex">
+        <p class="text-lg">There are no comments.</p>
+      </div>
+    <% end %>
   </:item>
 </.list>
 
