@@ -4,10 +4,16 @@ defmodule SnowPortalWeb.Admin.ListLive.Tickets.Show do
   alias SnowPortal.TicketPhoto
   alias SnowPortal.Tickets
   alias SnowPortal.NewTicket
+  alias SnowPortal.TicketComments
+  alias SnowPortal.NewComment
 
   @impl true
   def mount(_params, _session, socket) do
-    if connected?(socket), do: NewTicket.subscribe_update_ticket()
+    if connected?(socket) do
+      NewTicket.subscribe_update_ticket()
+      NewComment.subscribe_new_comment()
+    end
+
     {:ok, socket}
   end
 
@@ -15,12 +21,14 @@ defmodule SnowPortalWeb.Admin.ListLive.Tickets.Show do
   def handle_params(%{"id" => id}, _, socket) do
     ticket = Tickets.get_ticket!(id)
     ticket_attachments = Enum.map(ticket.ticket_attachments, &get_attachment_image_url(&1))
+    comments = TicketComments.list_tickets_comments(id)
 
     socket =
       socket
       |> assign(:page_title, page_title(socket.assigns.live_action))
       |> assign(:ticket, ticket)
       |> assign(:ticket_attachments, ticket_attachments)
+      |> assign(:comments, comments)
 
     if !is_nil(ticket.assigned_to_user_id) do
       assigned_to_user_id = Accounts.get_user!(ticket.assigned_to_user_id)
@@ -51,6 +59,20 @@ defmodule SnowPortalWeb.Admin.ListLive.Tickets.Show do
       socket
       |> assign(:ticket, new_ticket)
       |> assign(:ticket_attachments, ticket_attachments)
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:new_comment, ticket}, socket) do
+    new_ticket = Tickets.get_ticket!(ticket.id)
+    ticket_attachments = Enum.map(ticket.ticket_attachments, &get_attachment_image_url(&1))
+    comments = TicketComments.list_tickets_comments(ticket.id)
+
+    socket =
+      socket
+      |> assign(:ticket, new_ticket)
+      |> assign(:ticket_attachments, ticket_attachments)
+      |> assign(:comments, comments)
 
     {:noreply, socket}
   end

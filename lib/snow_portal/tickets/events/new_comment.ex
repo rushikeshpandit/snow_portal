@@ -1,10 +1,12 @@
-defmodule SnowPortal.Tickets.Events.NewComment do
+defmodule SnowPortal.NewComment do
   alias Phoenix.PubSub
-  @pubsub SnowPortal.Pubsub
+  @pubsub SnowPortal.PubSub
   @new_comment "new_comment"
   @update_comment "update_comment"
 
-  def subscribe_new_comment, do: PubSub.subscribe(@pubsub, @new_comment)
+  def subscribe_new_comment do
+    PubSub.subscribe(@pubsub, @new_comment)
+  end
 
   def broadcast_new_comment({:error, _} = err), do: err
 

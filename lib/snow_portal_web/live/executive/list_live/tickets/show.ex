@@ -1,4 +1,5 @@
 defmodule SnowPortalWeb.Executive.ListLive.Tickets.Show do
+  alias SnowPortal.NewComment
   alias SnowPortal.Accounts
   use SnowPortalWeb, :live_view
   alias SnowPortal.TicketPhoto
@@ -8,7 +9,11 @@ defmodule SnowPortalWeb.Executive.ListLive.Tickets.Show do
 
   @impl true
   def mount(_params, _session, socket) do
-    if connected?(socket), do: NewTicket.subscribe_update_ticket()
+    if connected?(socket) do
+      NewTicket.subscribe_update_ticket()
+      NewComment.subscribe_new_comment()
+    end
+
     {:ok, socket}
   end
 
@@ -49,6 +54,20 @@ defmodule SnowPortalWeb.Executive.ListLive.Tickets.Show do
   end
 
   def handle_info({:update_ticket, ticket}, socket) do
+    new_ticket = Tickets.get_ticket!(ticket.id)
+    ticket_attachments = Enum.map(ticket.ticket_attachments, &get_attachment_image_url(&1))
+    comments = TicketComments.list_tickets_comments(ticket.id)
+
+    socket =
+      socket
+      |> assign(:ticket, new_ticket)
+      |> assign(:ticket_attachments, ticket_attachments)
+      |> assign(:comments, comments)
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:new_comment, ticket}, socket) do
     new_ticket = Tickets.get_ticket!(ticket.id)
     ticket_attachments = Enum.map(ticket.ticket_attachments, &get_attachment_image_url(&1))
     comments = TicketComments.list_tickets_comments(ticket.id)

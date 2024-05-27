@@ -1,4 +1,4 @@
-defmodule SnowPortalWeb.Customer.TicketLive.CommentComponent do
+defmodule SnowPortalWeb.Common.CommentComponent do
   use SnowPortalWeb, :live_component
 
   def update(%{ticket_comment: ticket_comment} = assigns, socket) do
